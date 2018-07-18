@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, abort, make_response
+from flask import Flask, jsonify, abort, make_response, request
 
 app = Flask(__name__)
 
@@ -39,7 +39,22 @@ def get_specificEntry(entryId):
 
 @app.errorhandler(404)
 def entriesNotFound(error):
-    return make_response(jsonify({"error": "Resource not found"}, 404))
+    return make_response(jsonify({"error": "Resource not found"}), 404)
+
+@app.route('/mydiary/api/v1/entries', methods=['POST'])
+def create_entries():
+    if not request.json or not 'Title' in request.json:
+        abort(404)
+
+    entry = {
+        "id" : Dashboard[-1]["id"] + 1,
+        "Date" : request.json["Date"],
+        "Title" : request.json["Title"],
+        "Body" : request.json["Body"] 
+    }
+
+    Dashboard.append(entry)
+    return jsonify({'Dashboard': Dashboard}), 201
 
 
 if __name__ == "__main__":
