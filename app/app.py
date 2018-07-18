@@ -1,8 +1,7 @@
-from flask import Flask, jsonify
-# from flask_restful import Api, Resource
+from flask import Flask, jsonify, abort, make_response
 
 app = Flask(__name__)
-# api = Api(app)
+
 
 Dashboard = [
     {
@@ -30,6 +29,18 @@ Dashboard = [
 @app.route('/mydiary/api/v1/entries', methods=['GET'])
 def get_entries():
     return jsonify({'Dashboard': Dashboard})
+
+@app.route('/mydiary/api/v1/entries/<int:entryId>', methods=['GET'])
+def get_specificEntry(entryId):
+    newDashboard = [Dashboard for Dashboard in Dashboard if Dashboard["id"] == entryId]
+    if len(newDashboard) == 0:
+        abort(404)
+    return jsonify({'Dashboard': newDashboard})
+
+@app.errorhandler(404)
+def entriesNotFound(error):
+    return make_response(jsonify({"error": "Resource not found"}, 404))
+
 
 if __name__ == "__main__":
     app.run(debug=True)
