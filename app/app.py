@@ -23,6 +23,7 @@ Dashboard = [
         "Date" : "Thursday",
         "Title" : "Throw Back",
         "Body" : "So when is it i decided to try programming again?...." 
+
     }
 ]
 
@@ -50,7 +51,8 @@ def create_entries():
         "id" : Dashboard[-1]["id"] + 1,
         "Date" : request.json["Date"],
         "Title" : request.json["Title"],
-        "Body" : request.json["Body"] 
+        "Body" : request.json["Body"]
+    
     }
 
     Dashboard.append(entry)
@@ -58,4 +60,4 @@ def create_entries():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
