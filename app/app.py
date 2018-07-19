@@ -23,7 +23,7 @@ Dashboard = [
         "Date" : "Thursday",
         "Title" : "Throw Back",
         "Body" : "So when is it i decided to try programming again?...." 
-    }
+    },
 
 ]
 
