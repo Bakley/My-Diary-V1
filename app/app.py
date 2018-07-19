@@ -23,8 +23,8 @@ Dashboard = [
         "Date" : "Thursday",
         "Title" : "Throw Back",
         "Body" : "So when is it i decided to try programming again?...." 
-
     }
+
 ]
 
 @app.route('/mydiary/api/v1/entries', methods=['GET'])
@@ -51,12 +51,21 @@ def create_entries():
         "id" : Dashboard[-1]["id"] + 1,
         "Date" : request.json["Date"],
         "Title" : request.json["Title"],
-        "Body" : request.json["Body"]
-    
+        "Body" : request.json["Body"]    
     }
 
     Dashboard.append(entry)
     return jsonify({'Dashboard': Dashboard}), 201
+
+
+
+@app.route('/mydiary/api/v1/entries/<int:entryId>', methods=['DELETE'])
+def delete_task(entryId):
+    delDashboard = [Dashboard for Dashboard in Dashboard if Dashboard['id'] == entryId]
+    if len(delDashboard) == 0:
+        abort(404)
+    Dashboard.remove(delDashboard[0])
+    return jsonify({'result': True})
 
 
 if __name__ == "__main__":
