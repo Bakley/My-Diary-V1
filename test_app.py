@@ -5,6 +5,7 @@ import json
 
 class BasicTestCase(unittest.TestCase):
     
+    
     def test_index(self):
         """Initial test: Ensure flask was set up correctly."""
         tester = app.app.test_client(self)
@@ -16,19 +17,19 @@ class BasicTestCase(unittest.TestCase):
         self.url_route1 = '/mydiary/api/v1/entries'
         self.url_route2 = '/mydiary/api/v1/entries/1'
         self.entry = {
-            "id" : 1,
-            "Date" : "Monday",
-            "Title" : "I am learning all about TDD",
-            "Body" : "Its sounds simple in theory wait untill you actually try it out.." 
+            "id": 1,
+            "Date": "Monday",
+            "Title": "I am learning all about TDD",
+            "Body": "Its sounds simple in theory wait untill you actually try it out.." 
         }
       
 
     def test_api_can_get_all_diary_entries(self):
         """Test if the API can fetch all the Enries (Methods = GET)"""
         tester = app.app.test_client(self)
-        response = tester.get(self.url_route1, content_type = 'html/text')
+        response = tester.get(self.url_route1, content_type='html/text')
         self.assertEqual(response.status_code, 200)
-        response = tester.get(self.url_route2, content_type = 'html/text')
+        response = tester.get(self.url_route2, content_type='html/text')
         self.assertEqual(response.status_code, 200)
 
 

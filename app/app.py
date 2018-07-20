@@ -4,24 +4,24 @@ app = Flask(__name__)
 
 Dashboard = [
     {
-        "id":1,
-        "Date":"Tuesday",
-        "Title":"My first Blog",
-        "Body":"So I decided to pin down all my thoughts here...."
+        "id": 1,
+        "Date": "Tuesday",
+        "Title": "My first Blog",
+        "Body": "So I decided to pin down all my thoughts here...."
     },
 
     {
-        "id":2,
-        "Date":"Wednesday",
-        "Title":"My WCW",
-        "Body":"Ain't she a beauty...."
+        "id": 2,
+        "Date": "Wednesday",
+        "Title": "My WCW",
+        "Body": "Ain't she a beauty...."
     },
 
     {
-        "id":3,
-        "Date":"Thursday",
-        "Title":"Throw Back",
-        "Body":"So when is it i decided to try programming again?...." 
+        "id": 3,
+        "Date": "Thursday",
+        "Title": "Throw Back",
+        "Body": "So when is it i decided to try programming again?...." 
     },
 
 ]
@@ -37,7 +37,8 @@ def get_entries():
 
 @app.route('/mydiary/api/v1/entries/<int:entryId>', methods=['GET'])
 def get_specificEntry(entryId):
-    newDashboard = [Dashboard for Dashboard in Dashboard if Dashboard["id"] == entryId]
+    newDashboard = [Dashboard for Dashboard in Dashboard 
+        if Dashboard["id"] == entryId]
     if len(newDashboard) == 0:
         abort(404)
     return jsonify({'Dashboard': newDashboard})
@@ -49,10 +50,10 @@ def create_entries():
         abort(404)
 
     entry = {
-        "id" :Dashboard[-1]["id"] + 1,
-        "Date" :request.json["Date"],
-        "Title" :request.json["Title"],
-        "Body" :request.json["Body"],    
+        "id": Dashboard[-1]["id"] + 1,
+        "Date": request.json["Date"],
+        "Title": request.json["Title"],
+        "Body": request.json["Body"],    
     }
     Dashboard.append(entry)
     return jsonify({'Dashboard': Dashboard}), 201
@@ -68,7 +69,8 @@ def updateEntry(entryId):
 
 @app.route('/mydiary/api/v1/entries/<int:entryId>', methods=['DELETE'])
 def delete_task(entryId):
-    delDashboard = [Dashboard for Dashboard in Dashboard if Dashboard['id'] == entryId]
+    delDashboard = [Dashboard for Dashboard in Dashboard 
+        if Dashboard['id'] == entryId]
     if len(delDashboard) == 0:
         abort(404)
     Dashboard.remove(delDashboard[0])
