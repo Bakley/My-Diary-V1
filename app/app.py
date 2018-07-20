@@ -1,7 +1,6 @@
-from flask import Flask, jsonify, abort, make_response, request
+from flask import Flask, jsonify, abort, make_response, request, Markup
 
 app = Flask(__name__)
-
 
 Dashboard = [
     {
@@ -27,6 +26,11 @@ Dashboard = [
 
 ]
 
+@app.route('/')
+def home():
+    html =Markup("<h1>Hello, welcome to your Diary</h1>")
+    return html
+
 @app.route('/mydiary/api/v1/entries', methods=['GET'])
 def get_entries():
     return jsonify({'Dashboard': Dashboard})
@@ -38,9 +42,6 @@ def get_specificEntry(entryId):
         abort(404)
     return jsonify({'Dashboard': newDashboard})
 
-@app.errorhandler(404)
-def entriesNotFound(error):
-    return make_response(jsonify({"error": "Resource not found"}), 404)
 
 @app.route('/mydiary/api/v1/entries', methods=['POST'])
 def create_entries():
@@ -51,13 +52,19 @@ def create_entries():
         "id" : Dashboard[-1]["id"] + 1,
         "Date" : request.json["Date"],
         "Title" : request.json["Title"],
-        "Body" : request.json["Body"]    
+        "Body" : request.json["Body"],    
     }
 
     Dashboard.append(entry)
     return jsonify({'Dashboard': Dashboard}), 201
 
-
+@app.route('/mydiary/api/v1/entries/<int:entryId>', methods=['PUT'])
+def updateEntry(entryId):
+    updatedDashdoard = [Dashboard for Dashboard in Dashboard if Dashboard['id']== entryId]
+    updatedDashdoard[0]['Date'] = request.json('Date', updatedDashdoard[0]['Date'])
+    updatedDashdoard[0]['Title'] = request.json('Title', updatedDashdoard[0]['Title'])
+    updatedDashdoard[0]['Body'] = request.json('Body', updatedDashdoard[0]['Body'])
+    return jsonify({'Dashboard': updatedDashdoard[0]})
 
 @app.route('/mydiary/api/v1/entries/<int:entryId>', methods=['DELETE'])
 def delete_task(entryId):
@@ -66,6 +73,11 @@ def delete_task(entryId):
         abort(404)
     Dashboard.remove(delDashboard[0])
     return jsonify({'result': True})
+
+
+@app.errorhandler(404)
+def entriesNotFound(error):
+    return make_response(jsonify({"error": "Resource not found"}), 404)
 
 
 if __name__ == "__main__":
