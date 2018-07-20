@@ -7,8 +7,8 @@ install:
   - pip install -r requirements.txt
 
 sript:
-  - pytest
-  
+  - test_app.py --cov-report term-missing --cov=app -v
+
 after_success:
   - coveralls
 
