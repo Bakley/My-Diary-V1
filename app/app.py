@@ -81,6 +81,10 @@ def delete_task(entryId):
 def entriesNotFound(error):
     return make_response(jsonify({"error": "Resource not found"}), 404)
 
+@app.errorhandler(405)
+def methodsNotFound(error):
+    return make_response(jsonify({"error": "Resource not found"}), 405)
+
 
 if __name__ == "__main__":
     app.run(debug=False)
