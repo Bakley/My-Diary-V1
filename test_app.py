@@ -28,12 +28,9 @@ class BasicTestCase(unittest.TestCase):
         tester = app.app.test_client(self)
         response = tester.get(self.url_route1, content_type = 'html/text')
         self.assertEqual(response.status_code, 200)
-
-    def test_api_can_get_a_diary_entry_by_id(self):
-        """Test if the API can fetch an Entry by id (Methods = GET)"""
-        tester = app.app.test_client(self)
         response = tester.get(self.url_route2, content_type = 'html/text')
         self.assertEqual(response.status_code, 200)
+
 
     def test_api_can_create_a_new_diary_entry(self):
         """Test if the API can create an Entry (Methods = POST)"""

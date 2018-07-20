@@ -4,31 +4,31 @@ app = Flask(__name__)
 
 Dashboard = [
     {
-        "id" : 1,
-        "Date" : "Tuesday",
-        "Title" : "My first Blog",
-        "Body" : "So I decided to pin down all my thoughts here...."
+        "id":1,
+        "Date":"Tuesday",
+        "Title":"My first Blog",
+        "Body":"So I decided to pin down all my thoughts here...."
     },
 
     {
-        "id" : 2,
-        "Date" : "Wednesday",
-        "Title" : "My WCW",
-        "Body" : "Ain't she a beauty...."
+        "id":2,
+        "Date":"Wednesday",
+        "Title":"My WCW",
+        "Body":"Ain't she a beauty...."
     },
 
     {
-        "id" : 3,
-        "Date" : "Thursday",
-        "Title" : "Throw Back",
-        "Body" : "So when is it i decided to try programming again?...." 
+        "id":3,
+        "Date":"Thursday",
+        "Title":"Throw Back",
+        "Body":"So when is it i decided to try programming again?...." 
     },
 
 ]
 
 @app.route('/')
 def home():
-    html =Markup("<h1>Hello, welcome to your Diary</h1>")
+    html = Markup("<h1>Hello, welcome to your Diary</h1>")
     return html
 
 @app.route('/mydiary/api/v1/entries', methods=['GET'])
@@ -49,21 +49,21 @@ def create_entries():
         abort(404)
 
     entry = {
-        "id" : Dashboard[-1]["id"] + 1,
-        "Date" : request.json["Date"],
-        "Title" : request.json["Title"],
-        "Body" : request.json["Body"],    
+        "id" :Dashboard[-1]["id"] + 1,
+        "Date" :request.json["Date"],
+        "Title" :request.json["Title"],
+        "Body" :request.json["Body"],    
     }
-
     Dashboard.append(entry)
     return jsonify({'Dashboard': Dashboard}), 201
 
 @app.route('/mydiary/api/v1/entries/<int:entryId>', methods=['PUT'])
 def updateEntry(entryId):
-    updatedDashdoard = [Dashboard for Dashboard in Dashboard if Dashboard['id']== entryId]
+    updatedDashdoard = [Dashboard for Dashboard in Dashboard if Dashboard['id'] == entryId]
     updatedDashdoard[0]['Date'] = request.json('Date', updatedDashdoard[0]['Date'])
     updatedDashdoard[0]['Title'] = request.json('Title', updatedDashdoard[0]['Title'])
-    updatedDashdoard[0]['Body'] = request.json('Body', updatedDashdoard[0]['Body'])
+    updatedDashdoard[0]['Body'] = request.json('Body',
+        updatedDashdoard[0]['Body'])
     return jsonify({'Dashboard': updatedDashdoard[0]})
 
 @app.route('/mydiary/api/v1/entries/<int:entryId>', methods=['DELETE'])
