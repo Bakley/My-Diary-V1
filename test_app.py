@@ -4,7 +4,7 @@ import unittest
 import json
 
 class BasicTestCase(unittest.TestCase):
-    
+    """main"""
     
     def test_index(self):
         """Initial test: Ensure flask was set up correctly."""
