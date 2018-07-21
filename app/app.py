@@ -31,19 +31,27 @@ def home():
     html = Markup("<h1>Hello, welcome to your Diary</h1>")
     return html
 
+"""
+We defined the method as GET, here we get all the enrtries made
+Content-type: application/json
+"""
 @app.route('/mydiary/api/v1/entries', methods=['GET'])
 def get_entries():
     return jsonify({'Dashboard': Dashboard})
 
+"""
+Define the methos as GET, here we get a spefic entry with a given id
+"""
 @app.route('/mydiary/api/v1/entries/<int:entryId>', methods=['GET'])
 def get_specificEntry(entryId):
-    newDashboard = [Dashboard for Dashboard in Dashboard 
-        if Dashboard["id"] == entryId]
+    newDashboard = [Entry for Entry in Dashboard if Entry["id"] == entryId]
     if len(newDashboard) == 0:
         abort(404)
     return jsonify({'Dashboard': newDashboard})
 
-
+"""
+Define the method as POST
+"""
 @app.route('/mydiary/api/v1/entries', methods=['POST'])
 def create_entries():
     if not request.json or not 'Title' in request.json:
@@ -58,19 +66,23 @@ def create_entries():
     Dashboard.append(entry)
     return jsonify({'Dashboard': Dashboard}), 201
 
+"""
+Define the method as PUT, here we update the existing resourse
+"""
 @app.route('/mydiary/api/v1/entries/<int:entryId>', methods=['PUT'])
-def updateEntry(entryId):
-    updatedDashdoard = [Dashboard for Dashboard in Dashboard if Dashboard['id'] == entryId]
-    updatedDashdoard[0]['Date'] = request.json('Date', updatedDashdoard[0]['Date'])
-    updatedDashdoard[0]['Title'] = request.json('Title', updatedDashdoard[0]['Title'])
-    updatedDashdoard[0]['Body'] = request.json('Body',
-        updatedDashdoard[0]['Body'])
+def update_entry(entryId):
+    updatedDashdoard = [updateEntry for updateEntry in Dashboard if updateEntry['id'] == entryId]
+    updatedDashdoard[0]['Date'] = request.json('Date')
+    updatedDashdoard[0]['Title'] = request.json('Title')
+    updatedDashdoard[0]['Body'] = request.json('Body',updatedDashdoard[0]['Body'])
     return jsonify({'Dashboard': updatedDashdoard[0]})
 
+"""
+Define the method as DELETE, here we delete a resourse
+"""
 @app.route('/mydiary/api/v1/entries/<int:entryId>', methods=['DELETE'])
 def delete_task(entryId):
-    delDashboard = [Dashboard for Dashboard in Dashboard 
-        if Dashboard['id'] == entryId]
+    delDashboard = [delEntry for delEntry in Dashboard if delEntry['id'] == entryId]
     if len(delDashboard) == 0:
         abort(404)
     Dashboard.remove(delDashboard[0])
@@ -83,7 +95,7 @@ def entriesNotFound(error):
 
 @app.errorhandler(405)
 def methodsNotFound(error):
-    return make_response(jsonify({"error": "Resource not found"}), 405)
+    return make_response(jsonify({"error": "Method not allowed"}), 405)
 
 
 if __name__ == "__main__":
