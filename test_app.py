@@ -43,7 +43,9 @@ class BasicTestCase(unittest.TestCase):
 
     def test_api_can_delete_a_diary_entries(self):
         """Test if the API can delete an Entry (Methods = DELETE)"""
-        pass
+        tester = app.app.test_client(self)
+        response = tester.delete(self.url_route1)
+        self.assertEqual(response.status_code, 204)
 
 
 
