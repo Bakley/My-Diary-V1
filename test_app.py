@@ -30,7 +30,7 @@ class BasicTestCase(unittest.TestCase):
         response = tester.get(self.url_route1, content_type='html/text')
         self.assertEqual(response.status_code, 200)
         response = tester.get(self.url_route2, content_type='html/text')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 404)
 
 
     def test_api_can_create_a_new_diary_entry(self):
@@ -44,8 +44,8 @@ class BasicTestCase(unittest.TestCase):
     def test_api_can_delete_a_diary_entries(self):
         """Test if the API can delete an Entry (Methods = DELETE)"""
         tester = app.app.test_client(self)
-        response = tester.delete(self.url_route1)
-        self.assertEqual(response.status_code, 204)
+        response = tester.delete(self.url_route2)
+        self.assertEqual(response.status_code, 200)
 
 
 
