@@ -72,9 +72,11 @@ Define the method as PUT, here we update the existing resourse
 @app.route('/mydiary/api/v1/entries/<int:entryId>', methods=['PUT'])
 def update_entry(entryId):
     updatedDashdoard = [updateEntry for updateEntry in Dashboard if updateEntry['id'] == entryId]
-    updatedDashdoard[0]['Date'] = request.json('Date')
-    updatedDashdoard[0]['Title'] = request.json('Title')
-    updatedDashdoard[0]['Body'] = request.json('Body',updatedDashdoard[0]['Body'])
+    
+    updatedDashdoard[0]['Date'] = request.json.get("Date")
+    updatedDashdoard[0]['Title'] = request.json.get('Title')
+    updatedDashdoard[0]['Body'] = request.json.get('Body')
+    
     return jsonify({'Dashboard': updatedDashdoard[0]})
 
 """
@@ -96,6 +98,3 @@ def entriesNotFound(error):
 @app.errorhandler(405)
 def methodsNotFound(error):
     return make_response(jsonify({"error": "Method not allowed"}), 405)
-
-
-
