@@ -98,5 +98,4 @@ def methodsNotFound(error):
     return make_response(jsonify({"error": "Method not allowed"}), 405)
 
 
-if __name__ == "__main__":
-    app.run(debug=False)
+

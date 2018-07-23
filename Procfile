@@ -1,1 +1,2 @@
-web: gunicorn app:app --log-file=-
+web: gunicorn --workers=2 run:app
+
