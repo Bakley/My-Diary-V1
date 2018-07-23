@@ -1,4 +1,4 @@
-from app import app
+from app.manage import app
 
 import unittest
 import json
@@ -8,7 +8,7 @@ class BasicTestCase(unittest.TestCase):
     
     def test_index(self):
         """Initial test: Ensure flask was set up correctly."""
-        tester = app.app.test_client(self)
+        tester = app.test_client(self)
         response = tester.get('/', content_type='html/text')
         self.assertEqual(response.status_code, 200)
 
@@ -26,7 +26,7 @@ class BasicTestCase(unittest.TestCase):
 
     def test_api_can_get_all_diary_entries(self):
         """Test if the API can fetch all the Enries (Methods = GET)"""
-        tester = app.app.test_client(self)
+        tester = app.test_client(self)
         response = tester.get(self.url_route1, content_type='html/text')
         self.assertEqual(response.status_code, 200)
         response = tester.get(self.url_route2, content_type='html/text')
@@ -43,7 +43,7 @@ class BasicTestCase(unittest.TestCase):
 
     def test_api_can_delete_a_diary_entries(self):
         """Test if the API can delete an Entry (Methods = DELETE)"""
-        tester = app.app.test_client(self)
+        tester = app.test_client(self)
         response = tester.delete(self.url_route2)
         self.assertEqual(response.status_code, 200)
 
