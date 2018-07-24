@@ -85,7 +85,11 @@ Before we install our project's Python requirements, we need to activate the vir
 source venv/bin/activate
 ```
 
+<<<<<<< HEAD
 ## Clone and Configure a New Flask Project
+=======
+## Clone and Configure a Flask Project
+>>>>>>> 41a78b3814663e85a6cfaa3da35e601cd09ae270
 Login into your github account and open the project folder then follow the instruction on how to clone the existing project. It should be something similar to:
 ```
 git clone https://<github_account>@github.org/<your_github_username>/My-Diary-V1.git

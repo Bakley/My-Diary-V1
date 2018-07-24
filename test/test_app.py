@@ -1,4 +1,8 @@
+<<<<<<< HEAD:test/test_app.py
 from app.route import app
+=======
+from app.manage import app
+>>>>>>> 41a78b3814663e85a6cfaa3da35e601cd09ae270:test_app.py
 
 import unittest
 import json
