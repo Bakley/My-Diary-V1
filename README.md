@@ -114,4 +114,3 @@ $ python -m flask run
  * Running on http://127.0.0.1:5000/
 
  Now head over to http://127.0.0.1:5000/ and check what you see ;-)
-
