@@ -3,8 +3,8 @@ import jwt
 import datetime
 
 from passlib.apps import custom_app_context as pwd_context
-
 from createdb_helper import Database
+from app import app
 
 
 
@@ -26,7 +26,7 @@ class User():
     def create_user(self):
         database_connections = Database()
         columns = ("username",
-                    "user_password",
+                    "password",
                     "email"
         )
         values = (self.username,
@@ -58,9 +58,9 @@ class User():
             username = row[1]
             password = row[2]
             email = row[3]
-            user = User(username, password)
-            user.email = email
+            user = User(username, password, email)
             user.user_id = user_id
+            
         return user
 
     

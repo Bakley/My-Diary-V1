@@ -1,5 +1,4 @@
 from flask import Flask
-
 from config import app_config
 
 def create_app(config_name):
@@ -8,5 +7,5 @@ def create_app(config_name):
 
     return app
 
-app = create_app("development")
-# from views.userview import *
+app = create_app('development')
+# from views.userview import user_details

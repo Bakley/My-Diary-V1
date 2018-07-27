@@ -1,4 +1,3 @@
-
 class Config:
     """Parent configuration class"""
     DEBUG = False
@@ -27,3 +26,5 @@ app_config = {
     'testing': TestingConfig,
     'production': ProductionConfig
 }
+
+# This impoted to the app/__init__.py

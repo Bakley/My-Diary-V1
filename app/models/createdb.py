@@ -1,9 +1,8 @@
 import os
 import psycopg2
 
-
-from app.config import Config
-from app.config_database import config
+from app import app
+from config_database import config
 
 def connect_to_db():
     """Creates the database"""
@@ -31,10 +30,11 @@ def connect_to_db():
     )
     
     conn = None
+    """Read the connections parameters, get the db enviroment"""
     try:
         params = config()
     
-        if Config['testing']:
+        if app.config['testing']:
             params['database'] = "mydiaryentries_testing"
 
         if 'DATABASE_URL' in os.environ:
@@ -45,9 +45,12 @@ def connect_to_db():
             conn = psycopg2.connect(**params)
         cur = conn.cursor()
 
+        # creates the user and entries
         for command in commands:
             cur.execute(command)
+        # closes communication with the PostgreSQL database server
         cur.close()
+        # commit the changes
         conn.commit()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
