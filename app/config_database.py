@@ -4,9 +4,9 @@ def config():
     """
     db = {
         'host': 'localhost',
-        'database': 'mydiariesdb',
+        'database': 'mydiary',
         'user': 'koin',
-        'password': 'password123'
+        'password': 'kiki'
     }
 
     return db

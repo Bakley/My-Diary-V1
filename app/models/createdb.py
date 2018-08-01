@@ -2,7 +2,7 @@ import os
 import psycopg2
 
 from app import app
-from config_database import config
+from app.config_database import config
 
 def connect_to_db():
     """Creates the database"""
@@ -22,8 +22,8 @@ def connect_to_db():
             title VARCHAR NOT NULL,
             description VARCHAR NOT NULL,
             created_at timestamp NOT NULL,
-            last_modified timestamp NOT NULL,
-            PRIMARY KEY (user_id , id),
+            date_modified timestamp NOT NULL,
+            PRIMARY KEY (id),
             FOREIGN KEY (user_id) REFERENCES users (id)
         );
         """

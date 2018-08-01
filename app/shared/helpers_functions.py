@@ -3,7 +3,7 @@ from app.models.usermodel import User
 from flask import abort, jsonify, make_response
 
 def sign_up_user(username, password, email):
-    """Signs up a user"""
+    """A signup method to register a new user"""
     user = User.get_a_user(username)
     if user:
         response = {
@@ -18,13 +18,13 @@ def sign_up_user(username, password, email):
     response = {
         'message': 'Signed up successfully',
         'username': user.username,
-        'id': user_id,
-        'email': email
+        'id': user_id
     }
     return make_response(jsonify(response)), 201
 
 
-def login_user(username, password):
+def log_in_user(username, password):
+    """A login method thats logs in an existing user"""
     user = User.get_a_user(username)
 
     if not user:
@@ -34,7 +34,7 @@ def login_user(username, password):
         return make_response(jsonify(response)), 401
 
     if user.verify_password(password):
-        # generate access token
+        # JWT Authorization
         token = user.generate_auth_token()
         response = {
             'message': 'Logged in successfully',
