@@ -2,7 +2,7 @@ import os
 import psycopg2
 
 from app import app
-from config_database import config
+from app.config_database import config
 
 from app.models.createdb import connect_to_db
 
@@ -11,7 +11,8 @@ class Database:
 
     def __init__(self):
         params = config()
-        if app.config['testing']:
+        print("yes----", app.config)
+        if app.config['TESTING']:
             params['database'] = "mydiaryentries_testing"
 
         connect_to_db()

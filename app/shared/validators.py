@@ -7,15 +7,15 @@ class Validate:
     @staticmethod
     def validate_username(username):
         """Just checks length of Username"""
-        if len(username) < 10:
-            return [False, "Username should be at least 10 characters"]
+        if len(username) < 5:
+            return [False, "Username should be at least 5 characters"]
         return [True]
 
     @staticmethod
     def validate_password(password):
         """Just checks length of password"""
         if len(password) < 10:
-            return [False,'Password should be at least 5 characters']
+            return [False,'Password should be at least 10 characters']
         return [True]
 
     @staticmethod
@@ -26,5 +26,3 @@ class Validate:
             return [True]
         else:
             return [False, 'Email in wrong format']
-
-
