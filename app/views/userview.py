@@ -1,5 +1,5 @@
 from app import app
-from app.models.usermodel import User, Entries
+from app.models.usermodel import User
 from app.shared.helpers_functions import sign_up_user, log_in_user
 from app.shared.validators import Validate
 
@@ -68,7 +68,8 @@ def login_user():
     password_validation = Validate.validate_password(password)
     if not password_validation[0]:
         abort(401, password_validation[1])
-
+        
+ 
     return log_in_user(username, password)
 
 
@@ -94,30 +95,30 @@ def user_details(username):
     }
     return make_response(jsonify(response)), 200
 
-@app.route('/api/v1/entry/entry_id', methods=['GET'])
-def get_an_entry(entry_id):
-    """Gets the only one entry"""
-    try:
-        entry_id = int(entry_id)
-    except ValueError:
-        entry_id = entry_id
+# @app.route('/api/v1/entry/entry_id', methods=['GET'])
+# def get_an_entry(entry_id):
+#     """Gets the only one entry"""
+#     try:
+#         entry_id = int(entry_id)
+#     except ValueError:
+#         entry_id = entry_id
     
-    if type(entry_id) is not int:
-        abort(400, "Please provide an interget in order to retrive the diary entry")
-    access_token = request.header.get("Authorization")
+#     if type(entry_id) is not int:
+#         abort(400, "Please provide an interget in order to retrive the diary entry")
+#     access_token = request.header.get("Authorization")
 
-    if not access_token:
-        abort(401, "Please provide an access token in order to verify user")
+#     if not access_token:
+#         abort(401, "Please provide an access token in order to verify user")
 
-    verify_token(access_token)
-    entry = Entries.get_an_entry(int(entry_id))
+#     verify_token(access_token)
+#     entry = Entries.get_an_entry(int(entry_id))
 
-    if not entry:
-        response = {
-            'error': 'Not found',
-            'message': 'Entry cannot be found in our Database'
-        }
-        return make_response(jsonify(response)), 404
+#     if not entry:
+#         response = {
+#             'error': 'Not found',
+#             'message': 'Entry cannot be found in our Database'
+#         }
+#         return make_response(jsonify(response)), 404
 
 # @app.route('/api/v1/users/entry', methods=['POST'])
 # def create_entry():
@@ -166,6 +167,11 @@ def verify_token(access_token):
 
 
 # Handles Multiple error for differnet case
+@app.errorhandler(500)
+def internal_server_error(error):
+    return make_response(jsonify({"error": 'Internal Server Error',
+                                  "message": error.description}), 500)
+
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({"error": 'Resource Not Found',

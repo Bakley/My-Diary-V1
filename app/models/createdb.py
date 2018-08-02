@@ -33,21 +33,29 @@ def connect_to_db():
     """Read the connections parameters, get the db enviroment"""
     try:
         params = config()
+        print("the params ===> ", params)
     
-        if app.config['testing']:
-            params['database'] = "mydiaryentries_testing"
+        # if app.config['testing']:
+        #     params['database'] = "mydiaryentries_testing"
+        #     print("the params first if ===> ", params)
 
-        if 'DATABASE_URL' in os.environ:
-            database_url = os.environ['DATABASE_URL']
-            print(database_url)
-            conn = psycopg2.connect(database_url)
-        else:
-            conn = psycopg2.connect(**params)
+        # if 'DATABASE_URL' in os.environ:
+        #     database_url = os.environ['DATABASE_URL']
+        #     print("The db URL is",database_url)
+        #     conn = psycopg2.connect(database_url)
+        #     print("the params second if ===> ", params)
+        # else:
+        print("Are we in the right db?")
+        # connect to an existing database
+        conn = psycopg2.connect(**params)
+        print("connectors ==", conn)
         cur = conn.cursor()
+        print("cursor ==", cur)
 
         # creates the user and entries
-        for command in commands:
-            cur.execute(command)
+        # for command in commands:
+        #     print("The commands == ", command)
+        #     cur.execute(command)
         # closes communication with the PostgreSQL database server
         cur.close()
         # commit the changes

@@ -14,9 +14,7 @@ class User():
         self.username = username
         self.email = email
         self.password_hash = password
-        self.user_id = 0
-        self.conn = None
-        self.cur = None
+
     
     def hash_password(self, password):
         """A method that will hash a password/secret,
@@ -38,13 +36,13 @@ class User():
         values = (self.username,
                   self.password_hash,
                   self.email)
+        
+        print("Values ==>", values)
 
-        data_returned = database_connections.insert("users", columns, values, "user_id")
-        user_id = None # default empty state for variables
-        for row in data_returned:
-            user_id = row[0]
+        data_returned = database_connections.insert("users", columns, values)
+        print("Data ===>", data_returned)
 
-        return user_id
+        return data_returned
 
     @staticmethod
     def get_a_user(username):
@@ -53,6 +51,8 @@ class User():
         columns = "*"
         where = "username = \'" + username + "\'"
         data_returned = database_connections.select("users", columns, where=where)
+        print("User data", data_returned)
+        # return data_returned
 
         row = None
         if data_returned and len(data_returned) > 0:
@@ -60,12 +60,13 @@ class User():
         
         user = None
         if row:
-            user_id = row[0]
+            print("The user row", row)
+            id = row[0]
             username = row[1]
             password = row[2]
             email = row[3]
             user = User(username, password, email)
-            user.user_id = user_id
+            user.user_id = id
             
         return user
 
@@ -93,81 +94,53 @@ class User():
         except jwt.InvalidTokenError:
             return "Invalid token. Please register or login"
 
-class Entries():
-    """Creates the Diary Entry Models"""
+# class Entries():
+#     """Creates the Diary Entry Models"""
 
-    def __init__(self, title, description):
-        self.id = 0
-        self.title = title
-        self.description = description
-        self.created_at = datetime.datetime.utcnow()
-        self.date_modified = datetime.datetime.utcnow()
+#     def __init__(self, title, description):
+#         self.title = title
+#         self.description = description
+#         self.created_at = datetime.datetime.utcnow()
+#         self.date_modified = datetime.datetime.utcnow()
         
 
-    def add_a_new_entry(self, user_id):
-        """A method which adds an entry associated to a specific user"""
-        database_connections = Database()
-        columns = ('user_id', 'title', 'description' 'created_at', 'date_modified')
-        values = (user_id, self.title, self.description, self.created_at, self.date_modified)
+#     def add_a_new_entry(self, user_id):
+#         """A method which adds an entry associated to a specific user"""
+#         database_connections = Database()
+#         columns = ('user_id', 'title', 'description' 'created_at', 'date_modified')
+#         values = (user_id, self.title, self.description, self.created_at, self.date_modified)
 
-        data_returned = database_connections.insert('entries', columns, values, "entry_id")
+#         data_returned = database_connections.insert('entries', columns, values)
 
-        entry_id = None
-        for row in data_returned:
-            entry_id = row[0]
+#         entry_id = None
+#         for row in data_returned:
+#             entry_id = row[0]
 
-        self.id = entry_id
-        return self.id
+#         self.id = entry_id
+#         return self.id
 
-    @staticmethod
-    def get_an_entry(entry_id):
-        """A static method that gets one entry"""
-        database_connections = Database()
-        columns = ('r.*', 'u.username')
-        tables = 'entry r'
-        left_join =  'users u on (u.user=r.user_id)'
-        where = 'r.entry_id = ' + str(entry_id)
+#     @staticmethod
+#     def get_an_entry(entry_id):
+#         """A static method that gets one entry"""
+#         database_connections = Database()
+#         columns = ('r.*', 'u.username')
+#         tables = 'entry r'
+#         left_join =  'users u on (u.user=r.user_id)'
+#         where = 'r.entry_id = ' + str(entry_id)
 
-        data_returned = database_connections.select(tables, columns, left_join, where)
+#         data_returned = database_connections.select(tables, columns, left_join, where)
 
-        entry = None
-        if len(data_returned) == 0:
-            return entry
+#         entry = None
+#         if len(data_returned) == 0:
+#             return entry
 
-        for row  in data_returned[0]:
-            row = tuple(row.replace("(", "").replace(")", "").split(","))
-            title = row[2]
-            description = row[3]
-            username = row[4].replace("\"", "")
-            entry = Entries(username, title, description)
-            entry_id = row[0]
+#         for row  in data_returned[0]:
+#             row = tuple(row.replace("(", "").replace(")", "").split(","))
+#             title = row[2]
+#             description = row[3]
+#             username = row[4].replace("\"", "")
+#             entry = Entries(title, description)
+#             entry_id = row[0]
 
-        return entry
+#         return entry
 
-
-    @staticmethod
-    def get_all_entries(where=None):
-        """A static Method that retrives all our entries from the database"""
-        database_connections = Database()
-        columns = ('r.*', 'u.username')
-        tables = 'entry r'
-        left_join =  'users u on (u.user=r.user_id)'
-        if where:
-            where = 'u.username = \'' + where + '\''
-
-        data_returned = database_connections.select(tables, columns, left_join, where)
-
-        entry = []
-        if len(data_returned) == 0:
-            return entry
-
-        for row in data_returned:
-            row = tuple(row[0].replace("(", "").replace(")", "").split(","))
-            title = row[2]
-            description = row[3]
-            username = row[4].replace("\"", "")
-            new_entry = Entries(username, title, description)
-            new_entry.id = row[0]
-            entry.append(new_entry)
-
-        return entry
