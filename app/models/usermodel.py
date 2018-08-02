@@ -12,7 +12,7 @@ class User():
     """Create the User model class"""
     def __init__(self, username, email, password):
         self.username = username
-        self.email = email
+        self.email = None
         self.password_hash = password
 
     
@@ -21,10 +21,10 @@ class User():
         Uses the custom_app_context:LazyCryptContext"""
         self.password_hash = pwd_context.hash(password)
 
-    def verify_password(self, password):
+    def verify_password(self, password, hashed_password):
         """A method that will verify a password/secret against the hashed a password/secret,
         Uses the custom_app_context:LazyCryptContext"""
-        return pwd_context.verify(password, self.password_hash)
+        return pwd_context.verify(password, hashed_password)
 
     def create_user(self):
         """A method that adds a new user to the database"""
@@ -51,12 +51,13 @@ class User():
         columns = "*"
         where = "username = \'" + username + "\'"
         data_returned = database_connections.select("users", columns, where=where)
-        print("User data", data_returned)
+        print("User data", data_returned[3])
         # return data_returned
 
         row = None
         if data_returned and len(data_returned) > 0:
-            row = data_returned[0]
+            row = data_returned
+            print("We are checking the row", row)
         
         user = None
         if row:
@@ -66,9 +67,8 @@ class User():
             password = row[2]
             email = row[3]
             user = User(username, password, email)
-            user.user_id = id
             
-        return user
+        return data_returned
 
     
     def generate_auth_token(self):
@@ -77,7 +77,7 @@ class User():
             'user': self.username,
             'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
         }
-        token = jwt.encode(payload, app.config['SECRET'], algorithm='HS256')
+        token = jwt.encode(payload, "tyrytdtyd", algorithm='HS256')
 
         return token
 
@@ -86,7 +86,7 @@ class User():
         """A statis method used to decode a token obtained from the authorization header"""
         try:
             payload = jwt.decode(token,
-                                 app.config['SECRET'],
+                                 "tyrytdtyd",
                                  algorithms='HS256')
             return payload['user']
         except jwt.ExpiredSignature:
