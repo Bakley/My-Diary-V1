@@ -2,7 +2,7 @@ from app.models.usermodel import User
 
 from flask import abort, jsonify, make_response
 
-def sign_up_user(username, password, email):
+def sign_up_user(username, password_hash, email):
     """A signup method to register a new user"""
     user = User.get_a_user(username)
     if user:
@@ -12,13 +12,12 @@ def sign_up_user(username, password, email):
         }
         return make_response(jsonify(response)), 409
 
-    user = User(username=username, email=email, password= password)
-    user_id = user.create_user()
+    user = User(username=username, email=email, password=password_hash)
+    user = user.create_user()
 
     response = {
         'message': 'Signed up successfully',
-        'username': user.username,
-        'id': user_id
+        # 'user': user
     }
     return make_response(jsonify(response)), 201
 
@@ -26,8 +25,10 @@ def sign_up_user(username, password, email):
 def log_in_user(username, password):
     """A login method thats logs in an existing user"""
     user = User.get_a_user(username)
+    print("My user", user)
 
     if not user:
+        print("My user after not if", user)
         response = {
             'message': 'User account does not exist'
         }

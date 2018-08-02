@@ -11,32 +11,31 @@ class Database:
 
     def __init__(self):
         params = config()
-        print("yes----", app.config)
-        if app.config['TESTING']:
-            params['database'] = "mydiaryentries_testing"
+        # if app.config['TESTING']:
+        #     params['database'] = "mydiaryentries_testing"
 
-        connect_to_db()
-        if 'DATABASE_URL' in os.environ:
-            database_url = os.environ['DATABASE_URL']
-            print(database_url)
-            self.conn = psycopg2.connect(database_url)
+        # connect_to_db()
+        # if 'DATABASE_URL' in os.environ:
+        #     database_url = os.environ['DATABASE_URL']
+        #     print(database_url)
+        #     self.conn = psycopg2.connect(database_url)
         
-        else:
-            self.conn = psycopg2.connect(**params)
+        # else:
+        self.conn = psycopg2.connect(**params)
         self.cur = self.conn.cursor()
 
-    def insert(self, table, columns, values, returning=None):
+    def insert(self, table, columns, values):
         """
         Inserts elements into a table given columns and values
         Returns the values returned after executing the sql statement
         """
         columns = str(columns).replace("\'", "")
         values = str(values)
-        sql = "INSERT INTO " + table + " " + columns + " VALUES " + values
-        if returning:
-            sql = sql + " RETURNING " + returning
-
+        sql = "INSERT INTO " + table + " " + columns + " VALUES " + values + ";"
+        print("the insert sql ==", sql)
+ 
         return_val = self.execute_sql(sql)
+        print("the sql", return_val)
         return return_val
 
     def select(self, table, columns, left_join=None, where=None):
@@ -64,10 +63,13 @@ class Database:
     def execute_sql(self, sql, fetch=True):
         """Executes the sql statement and returns the values from the database"""
         return_val = None
+        print("the sql after return_val = ", sql)
         try:
             self.cur.execute(sql)
+            self.conn.commit()
             if fetch:
-                return_val = self.cur.fetchall()
+                return_val = self.cur.fetchone()
+                print("afterbfetch", return_val)
             else:
                 return_val = ['Empty data']
             self.conn.commit()

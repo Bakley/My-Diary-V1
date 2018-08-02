@@ -3,7 +3,7 @@ import psycopg2
 import json
 
 from app.config_database import config
-from app.models.usermodel import User, Entries
+from app.models.usermodel import User
 from app import app
 
 class TestBasicAuth(unittest.TestCase):
