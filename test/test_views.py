@@ -1,5 +1,4 @@
 import unittest
-import psycopg2
 import json
 
 from app.config_database import config

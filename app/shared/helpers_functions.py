@@ -12,7 +12,11 @@ def sign_up_user(username, password_hash, email):
         }
         return make_response(jsonify(response)), 409
 
-    user = User(username=username, email=email, password=password_hash)
+    user = User(username=username, password=password_hash, email=email)
+    user.hash_password(password_hash)
+    print("The hashed password == ", user.hash_password(password_hash)
+)
+    user.email = email
     user = user.create_user()
 
     response = {
@@ -25,7 +29,8 @@ def sign_up_user(username, password_hash, email):
 def log_in_user(username, password):
     """A login method thats logs in an existing user"""
     user = User.get_a_user(username)
-    print("My user", user)
+    user_object = User(username, None, password)
+    print("My user in log_in_user", user)
 
     if not user:
         print("My user after not if", user)
@@ -34,9 +39,10 @@ def log_in_user(username, password):
         }
         return make_response(jsonify(response)), 401
 
-    if user.verify_password(password):
+    if user_object.verify_password(password, user[3]):
         # JWT Authorization
-        token = user.generate_auth_token()
+        token = user_object.generate_auth_token()
+        print("The JWT =", token)
         response = {
             'message': 'Logged in successfully',
             'access_token': token.decode('UTF-8')
